@@ -20,14 +20,20 @@
 <body>
     <h1>⏱️ Temporizador</h1>
 
+    <div class="inputs">
+        <input type="number" id="minutos" placeholder="Min" min="0" max="59">
+        <span>:</span>
+        <input type="number" id="segundos" placeholder="Seg" min="0" max="59">
+    </div>
+
     <div class="timer">
-        <span id="display"></span>
+        <span id="display">00:00</span>
     </div>
 
     <div class="buttons-container">
-        <button id="start">Iniciar</button>
-        <button id="pause">Pausar</button>
-        <button id="reset">Resetar</button>
+        <button onclick="iniciar()">Iniciar</button>
+        <button onclick="pausar()">Pausar</button>
+        <button onclick="resetar()">Resetar</button>
     </div>
 </body>
 

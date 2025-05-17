@@ -22,6 +22,37 @@ h1 {
     margin-bottom: 40px;
 }
 
+.inputs {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.inputs input {
+    width: 80px;
+    font-size: 1.5rem;
+    padding: 8px;
+    text-align: center;
+    border-radius: 8px;
+    border: 2px solid #00ff99;
+    background-color: #111;
+    color: #00ff99;
+    margin: 0 5px;
+}
+
+.inputs:focus-within input {
+    outline: none;
+}
+
+input::placeholder {
+    font-size: 1rem;
+}
+
+.inputs span {
+    color: #00ff99;
+    font-size: 2rem;
+}
+
 .timer {
     font-size: 10rem;
     font-weight: bold;

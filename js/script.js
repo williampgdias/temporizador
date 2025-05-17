@@ -25,6 +25,23 @@ function atualizarDisplay() {
 function iniciar() {
     if (intervalo) return;
 
+    if (tempo === 0) {
+        const minutosInput = document.getElementById('minutos').value;
+        const segundosInput = document.getElementById('segundos').value;
+
+        // Converte os valores para número
+        let min = parseInt(minutosInput) || 0;
+        let seg = parseInt(segundosInput) || 0;
+        tempo = min * 60 + seg;
+
+        if (tempo <= 0) {
+            alert('Digite um tempo válido!');
+            return;
+        }
+
+        atualizarDisplay();
+    }
+
     intervalo = setInterval(() => {
         tempo--;
         atualizarDisplay();
@@ -45,9 +62,12 @@ function pausar() {
 }
 
 function resetar() {
-    pausar();
-    tempo = 5;
-    atualizarDisplay();
+    clearInterval(intervalo);
+    intervalo = null;
+    tempo = 0;
+    document.getElementById('display').textContent = '00:00';
+    document.getElementById('minutos').value = '';
+    document.getElementById('segundos').value = '';
 }
 
 // Mostrar tempo inicial
