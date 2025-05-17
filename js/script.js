@@ -1,82 +1,76 @@
-let tempo = 5;
+let tempo = 0;
 let intervalo = null;
-
-function formatarTempo(segundos) {
-    const minutos = Math.floor(segundos / 60);
-    const segundosRestantes = segundos % 60;
-
-    // Adiciona um zero na frente se for menor que 10.
-    const m = minutos < 10 ? '0' + minutos : minutos;
-    const s =
-        segundosRestantes < 10 ? '0' + segundosRestantes : segundosRestantes;
-
-    return `${m}:${s}`;
-}
-
-const display = document.getElementById('display');
-const btnStart = document.getElementById('start');
-const btnPause = document.getElementById('pause');
-const btnReset = document.getElementById('reset');
+let pausado = false;
 
 function atualizarDisplay() {
-    display.textContent = formatarTempo(tempo);
+    const minutos = Math.floor(tempo / 60);
+    const segundos = tempo % 60;
+    document.getElementById('display').textContent = `${String(
+        minutos
+    ).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
 }
 
-function iniciar() {
-    if (intervalo) return;
+function contar() {
+    tempo--;
+    atualizarDisplay();
 
-    if (tempo === 0) {
-        const minutosInput = document.getElementById('minutos').value;
-        const segundosInput = document.getElementById('segundos').value;
-
-        // Converte os valores para número
-        let min = parseInt(minutosInput) || 0;
-        let seg = parseInt(segundosInput) || 0;
-        tempo = min * 60 + seg;
-
-        if (tempo <= 0) {
-            alert('Digite um tempo válido!');
-            return;
-        }
-
-        atualizarDisplay();
+    if (tempo <= 0) {
+        clearInterval(intervalo);
+        intervalo = null;
+        document.getElementById('btn-iniciar').textContent = 'Iniciar';
+        animarFinal();
     }
-
-    intervalo = setInterval(() => {
-        tempo--;
-        atualizarDisplay();
-
-        if (tempo <= 0) {
-            clearInterval(intervalo);
-            intervalo = null;
-            animarFinal();
-        }
-    }, 1000);
 }
 
-function pausar() {
+function iniciarOuPausar() {
+    const btn = document.getElementById('btn-iniciar');
+
+    // Se está contando => Pausar
     if (intervalo) {
         clearInterval(intervalo);
         intervalo = null;
+        pausado = true;
+        btn.textContent = 'Continuar';
+        return;
     }
+
+    // Se estava pausado => Continuar
+    if (pausado && tempo > 0) {
+        intervalo = setInterval(contar, 1000);
+        pausado = false;
+        btn.textContent = 'Pausar';
+        return;
+    }
+
+    // Se tempo zerado => Iniciar novo tempo
+    const minutosInput = document.getElementById('minutos').value;
+    const segundosInput = document.getElementById('segundos').value;
+
+    const min = parseInt(minutosInput) || 0;
+    const seg = parseInt(segundosInput) || 0;
+
+    tempo = min * 60 + seg;
+
+    if (tempo <= 0) {
+        alert('Digite um tempo válido!');
+        return;
+    }
+
+    atualizarDisplay();
+    intervalo = setInterval(contar, 1000);
+    btn.textContent = 'Pausar';
+    pausado = false;
 }
 
 function resetar() {
     clearInterval(intervalo);
     intervalo = null;
     tempo = 0;
+    pausado = false;
+
     document.getElementById('display').textContent = '00:00';
-    document.getElementById('minutos').value = '';
-    document.getElementById('segundos').value = '';
+    document.getElementById('btn-iniciar').textContent = 'Iniciar';
 }
-
-// Mostrar tempo inicial
-atualizarDisplay();
-
-// Eventos dos botões
-btnStart.addEventListener('click', iniciar);
-btnPause.addEventListener('click', pausar);
-btnReset.addEventListener('click', resetar);
 
 // Animação do GSAP
 function animarFinal() {
