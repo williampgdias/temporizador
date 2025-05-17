@@ -67,9 +67,21 @@ function resetar() {
     intervalo = null;
     tempo = 0;
     pausado = false;
+    document.getElementById('minutos').value = '';
+    document.getElementById('segundos').value = '';
 
     document.getElementById('display').textContent = '00:00';
     document.getElementById('btn-iniciar').textContent = 'Iniciar';
+
+    // Animação de saída da mensagem que acabou o texto
+    gsap.to('#mensagem-final', {
+        opacity: 0,
+        y: 50,
+        duration: 0.5,
+        onComplete: () => {
+            document.getElementById('mensagem-final').style.display = 'none';
+        },
+    });
 }
 
 // Animação do GSAP
@@ -106,4 +118,19 @@ function animarFinal() {
             ease: 'power2.inOut',
         }
     );
+
+    // Aparece o texto de "Tempo Esgotado"
+    const mensagem = document.getElementById('mensagem-final');
+
+    // Mostra o elemento antes de animar
+    mensagem.style.display = 'block';
+    mensagem.style.opacity = 0;
+    mensagem.style.transform = 'translateY(50px)';
+
+    gsap.to(mensagem, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power2.inOut',
+    });
 }
