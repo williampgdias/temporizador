@@ -1,4 +1,4 @@
-let tempo = 300;
+let tempo = 5;
 let intervalo = null;
 
 function formatarTempo(segundos) {
@@ -32,7 +32,7 @@ function iniciar() {
         if (tempo <= 0) {
             clearInterval(intervalo);
             intervalo = null;
-            alert('⏰ Tempo esgotado!');
+            animarFinal();
         }
     }, 1000);
 }
@@ -46,7 +46,7 @@ function pausar() {
 
 function resetar() {
     pausar();
-    tempo = 300;
+    tempo = 5;
     atualizarDisplay();
 }
 
@@ -57,3 +57,39 @@ atualizarDisplay();
 btnStart.addEventListener('click', iniciar);
 btnPause.addEventListener('click', pausar);
 btnReset.addEventListener('click', resetar);
+
+// Animação do GSAP
+function animarFinal() {
+    gsap.fromTo(
+        'body',
+        {
+            backgroundColor: '#121212',
+        },
+        {
+            backgroundColor: '#ff0044',
+            repeat: 7,
+            yoyo: true,
+            duration: 0.3,
+            ease: 'power1.inOut',
+        }
+    );
+
+    // Anima o display crescendo e piscando
+    gsap.fromTo(
+        '#display',
+        {
+            scale: 1,
+            opacity: 1,
+            color: '#00ff99',
+        },
+        {
+            scale: 1.5,
+            opacity: 0.2,
+            color: 'fff',
+            duration: 0.8,
+            repeat: 3,
+            yoyo: true,
+            ease: 'power2.inOut',
+        }
+    );
+}
