@@ -1,4 +1,5 @@
 let tempo = 300;
+let intervalo = null;
 
 function formatarTempo(segundos) {
     const minutos = Math.floor(segundos / 60);
@@ -13,15 +14,46 @@ function formatarTempo(segundos) {
 }
 
 const display = document.getElementById('display');
-display.textContent = formatarTempo(tempo);
+const btnStart = document.getElementById('start');
+const btnPause = document.getElementById('pause');
+const btnReset = document.getElementById('reset');
 
-const intervalo = setInterval(() => {
-    tempo--;
-
+function atualizarDisplay() {
     display.textContent = formatarTempo(tempo);
+}
 
-    if (tempo <= 0) {
+function iniciar() {
+    if (intervalo) return;
+
+    intervalo = setInterval(() => {
+        tempo--;
+        atualizarDisplay();
+
+        if (tempo <= 0) {
+            clearInterval(intervalo);
+            intervalo = null;
+            alert('⏰ Tempo esgotado!');
+        }
+    }, 1000);
+}
+
+function pausar() {
+    if (intervalo) {
         clearInterval(intervalo);
-        alert('⏰ Tempo esgotado!');
+        intervalo = null;
     }
-}, 1000);
+}
+
+function resetar() {
+    pausar();
+    tempo = 300;
+    atualizarDisplay();
+}
+
+// Mostrar tempo inicial
+atualizarDisplay();
+
+// Eventos dos botões
+btnStart.addEventListener('click', iniciar);
+btnPause.addEventListener('click', pausar);
+btnReset.addEventListener('click', resetar);
